@@ -1,0 +1,13 @@
+{% extends "base.html" %}{% block title %}Soudeurs du Littoral – MetalLink{% endblock %}
+{% block content %}<div class="max-w-6xl mx-auto px-4 py-10">
+<h1 class="text-3xl font-extrabold">Trouver un soudeur</h1>
+<form id="filters" method="get" class="mt-6 grid gap-3 rounded-2xl bg-white p-4 shadow-sm sm:grid-cols-4">
+ <input name="q" value="{{ q }}" data-safe="line" maxlength="60" placeholder="Mot-clé" class="rounded-xl border border-slate-200 px-4 py-3">
+ <select name="ville" class="rounded-xl border border-slate-200 px-4 py-3"><option value="">Toutes les villes</option>{% for v,l in cities %}<option value="{{ v }}" {% if v == sel_city %}selected{% endif %}>{{ l }}</option>{% endfor %}</select>
+ <select name="categorie" class="rounded-xl border border-slate-200 px-4 py-3"><option value="">Tous les travaux</option>{% for k,l in categories %}<option value="{{ k }}" {% if k == sel_cat %}selected{% endif %}>{{ l }}</option>{% endfor %}</select>
+ <button class="rounded-xl bg-orange-500 px-5 py-3 font-bold text-white">Filtrer</button>
+</form>
+<p id="count" class="mt-4 text-sm text-slate-500">{{ artisans|length }} résultat{{ artisans|length|pluralize }}</p>
+<div id="results" class="mt-4 grid gap-5 sm:grid-cols-2 lg:grid-cols-3" data-api="{% url 'market:api_list' %}">
+{% for a in artisans %}{% include "market/_card.html" %}{% empty %}<p class="text-slate-500">Aucun soudeur ne correspond pour l'instant.</p>{% endfor %}
+</div></div>{% endblock %}

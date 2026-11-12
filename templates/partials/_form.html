@@ -1,0 +1,18 @@
+<form method="post" novalidate class="space-y-5" autocomplete="off">
+  {% csrf_token %}
+  {% if form.non_field_errors %}<div class="rounded-xl bg-red-100 text-red-800 px-4 py-3 text-sm">{{ form.non_field_errors }}</div>{% endif %}
+  {% for f in form %}
+    {% if f.name == "website" %}<div class="absolute -left-[9999px]" aria-hidden="true">{{ f }}</div>
+    {% else %}
+    <div data-field="{{ f.name }}">
+      {% if f.field.widget.input_type == "checkbox" %}
+        <label class="flex items-center gap-2 text-sm">{{ f }} {{ f.label }}</label>
+      {% else %}
+        <label for="{{ f.id_for_label }}" class="block text-sm font-semibold mb-1">{{ f.label }}{% if f.field.required %} <span class="text-orange-600">*</span>{% endif %}</label>
+        {{ f }}
+      {% endif %}
+      {% for e in f.errors %}<p class="mt-1 text-sm text-red-600">{{ e }}</p>{% endfor %}
+    </div>{% endif %}
+  {% endfor %}
+  <button class="w-full rounded-xl bg-orange-500 px-5 py-3 font-bold text-white hover:bg-orange-600 transition">{{ submit|default:"Enregistrer" }}</button>
+</form>

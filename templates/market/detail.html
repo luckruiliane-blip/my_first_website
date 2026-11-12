@@ -1,0 +1,22 @@
+{% extends "base.html" %}{% block title %}{{ p.business_name }} – soudeur à {{ p.city }} | MetalLink{% endblock %}
+{% block description %}{{ p.business_name }}, soudeur à {{ p.city }} ({{ p.location }}). Services, rendez-vous et devis en ligne sur MetalLink.{% endblock %}
+{% block head %}{% if jsonld %}<script type="application/ld+json">{{ jsonld|safe }}</script>{% endif %}{% endblock %}
+{% block content %}<div class="max-w-5xl mx-auto px-4 py-10 grid gap-8 lg:grid-cols-3">
+<div class="lg:col-span-2 space-y-6">
+ <img src="{{ IMAGES.cards.0 }}" alt="Atelier {{ p.business_name }}" class="h-64 w-full rounded-2xl object-cover bg-slate-200" referrerpolicy="no-referrer">
+ <div><div class="flex flex-wrap items-center gap-2"><h1 class="text-3xl font-extrabold">{{ p.business_name }}</h1>{% if p.is_verified %}<span class="badge bg-emerald-100 text-emerald-700">Vérifié</span>{% endif %}</div>
+ <p class="mt-1 text-slate-600">{{ p.location }}, {{ p.city }}{% if p.landmark %} · près de {{ p.landmark }}{% endif %}</p>
+ {% if p.years_experience %}<p class="text-sm text-slate-500">{{ p.years_experience }} ans d'expérience</p>{% endif %}</div>
+ {% if p.bio %}<p class="whitespace-pre-line">{{ p.bio }}</p>{% endif %}
+ <section><h2 class="text-xl font-bold mb-3">Services proposés</h2><div class="space-y-3">
+ {% for s in services %}<div class="rounded-xl bg-white p-4 shadow-sm"><div class="flex justify-between gap-2"><p class="font-semibold">{{ s.title }}</p>{% if s.price_from %}<p class="text-orange-600 font-bold whitespace-nowrap">dès {{ s.price_from }} FCFA</p>{% endif %}</div>
+ <p class="text-xs text-slate-400">{{ s.get_category_display }}</p><p class="text-sm mt-1">{{ s.description }}</p></div>
+ {% empty %}<p class="text-slate-500">Aucun service publié pour l'instant.</p>{% endfor %}</div></section>
+</div>
+<aside class="space-y-3 lg:sticky lg:top-24 h-fit rounded-2xl bg-white p-5 shadow">
+ <button id="contact-btn" data-url="{% url 'market:api_contact' p.pk %}" class="w-full rounded-xl bg-emerald-600 px-5 py-3 font-bold text-white hover:bg-emerald-700">Contacter sur WhatsApp</button>
+ <p id="contact-phone" class="hidden text-center text-sm text-slate-600"></p>
+ <a href="{% url 'market:appointment' p.pk %}" class="block rounded-xl bg-orange-500 px-5 py-3 text-center font-bold text-white hover:bg-orange-600">Prendre rendez-vous</a>
+ <a href="{% url 'market:quote' p.pk %}" class="block rounded-xl border-2 border-slate-900 px-5 py-3 text-center font-bold hover:bg-slate-900 hover:text-white">Demander un devis</a>
+ <p class="text-xs text-slate-500 text-center">Le numéro s'affiche uniquement quand vous cliquez sur « Contacter ».</p>
+</aside></div>{% endblock %}

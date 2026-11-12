@@ -1,0 +1,31 @@
+{% extends "base.html" %}{% block title %}Espace soudeur – MetalLink{% endblock %}{% block robots %}noindex{% endblock %}
+{% block content %}<div class="max-w-5xl mx-auto px-4 py-10 space-y-8">
+<div class="rounded-2xl p-5 {% if profile.has_access %}bg-emerald-50 border border-emerald-200{% else %}bg-red-50 border border-red-200{% endif %} flex flex-wrap items-center justify-between gap-3">
+ <div>{% if profile.has_access %}<p class="font-bold">{% if profile.in_trial %}Essai gratuit{% else %}Abonnement actif{% endif %} : {{ profile.days_left }} jour{{ profile.days_left|pluralize }} restant{{ profile.days_left|pluralize }}</p>
+ <p class="text-sm text-slate-600">Votre fiche est visible par les clients.</p>
+ {% else %}<p class="font-bold text-red-700">Votre accès est expiré : votre fiche n'est plus visible.</p><p class="text-sm">Renouvelez pour {{ PRICE }} FCFA (1 mois).</p>{% endif %}</div>
+ <a href="{% url 'billing:pay' %}" class="rounded-xl bg-slate-900 text-white px-5 py-2.5 font-semibold">{% if profile.has_access %}Prolonger{% else %}Renouveler{% endif %} – {{ PRICE }} FCFA</a></div>
+<section class="rounded-2xl bg-white p-5 shadow-sm"><div class="flex justify-between items-start gap-3"><div>
+<h1 class="text-2xl font-extrabold">{{ profile.business_name }}</h1>
+<p class="text-sm text-slate-600 mt-1">{{ profile.location }}, {{ profile.city }} · Tél {{ profile.phone }} · WhatsApp {{ profile.whatsapp }}</p></div>
+<a class="text-orange-600 font-semibold text-sm" href="{% url 'market:profile' %}">Modifier mon lieu et mes contacts</a></div></section>
+<section><div class="flex justify-between items-center mb-3"><h2 class="text-xl font-bold">Mes services</h2>
+<a href="{% url 'market:service_new' %}" class="rounded-xl bg-orange-500 text-white px-4 py-2 text-sm font-semibold">Ajouter</a></div><div class="grid gap-3 sm:grid-cols-2">
+{% for s in services %}<div class="rounded-xl bg-white p-4 shadow-sm"><p class="font-semibold">{{ s.title }} {% if not s.is_published %}<span class="badge">brouillon</span>{% endif %}</p>
+<p class="text-sm text-slate-500">{{ s.get_category_display }}{% if s.price_from %} · dès {{ s.price_from }} FCFA{% endif %}</p>
+<div class="mt-2 flex gap-3 text-sm"><a class="text-orange-600" href="{% url 'market:service_edit' s.pk %}">Modifier</a>
+<form method="post" action="{% url 'market:service_delete' s.pk %}">{% csrf_token %}<button class="text-red-600">Supprimer</button></form></div></div>
+{% empty %}<p class="text-slate-500">Ajoutez votre premier service pour apparaître dans les recherches.</p>{% endfor %}</div></section>
+<section><h2 class="text-xl font-bold mb-3">Rendez-vous reçus</h2><div class="space-y-3">
+{% for a in appointments %}<div class="rounded-xl bg-white p-4 shadow-sm"><div class="flex flex-wrap justify-between gap-2">
+<div><p class="font-semibold">{{ a.client.full_name }} – {{ a.date|date:"d/m/Y" }} à {{ a.time|time:"H:i" }}</p><p class="text-sm text-slate-500">{{ a.work_place }} · {{ a.client.phone }}</p>{% if a.note %}<p class="text-sm mt-1">{{ a.note }}</p>{% endif %}</div>
+<span class="badge">{{ a.get_status_display }}</span></div>
+{% if a.status == "pending" %}<div class="mt-3 flex gap-2"><form method="post" action="{% url 'market:appointment_status' a.pk 'confirmed' %}">{% csrf_token %}<button class="rounded-lg bg-emerald-600 text-white px-3 py-1.5 text-sm">Confirmer</button></form>
+<form method="post" action="{% url 'market:appointment_status' a.pk 'declined' %}">{% csrf_token %}<button class="rounded-lg border px-3 py-1.5 text-sm">Refuser</button></form></div>{% elif a.status == "confirmed" %}
+<form class="mt-3" method="post" action="{% url 'market:appointment_status' a.pk 'done' %}">{% csrf_token %}<button class="rounded-lg border px-3 py-1.5 text-sm">Marquer terminé</button></form>{% endif %}</div>
+{% empty %}<p class="text-slate-500">Aucun rendez-vous.</p>{% endfor %}</div></section>
+<section><h2 class="text-xl font-bold mb-3">Demandes de devis</h2><div class="space-y-3">
+{% for q in quotes %}<div class="rounded-xl bg-white p-4 shadow-sm"><div class="flex flex-wrap justify-between gap-2"><p class="font-semibold">{{ q.client.full_name }} – {{ q.get_category_display }} ({{ q.city }})</p><span class="badge">{{ q.get_status_display }}</span></div>
+<p class="text-sm mt-1">{{ q.description }}</p>{% if q.budget %}<p class="text-sm text-slate-500">Budget : {{ q.budget }} FCFA</p>{% endif %}
+{% if q.status == "new" %}<a class="mt-2 inline-block text-orange-600 font-semibold text-sm" href="{% url 'market:quote_answer' q.pk %}">Répondre avec un prix</a>{% endif %}</div>
+{% empty %}<p class="text-slate-500">Aucune demande.</p>{% endfor %}</div></section></div>{% endblock %}

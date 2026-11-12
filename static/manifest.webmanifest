@@ -1,0 +1,14 @@
+{
+  "name": "MetalLink",
+  "short_name": "MetalLink",
+  "description": "Soudeurs et métalliers du Littoral, Cameroun",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "lang": "fr",
+  "icons": [
+    {"src": "/static/img/icon-192.png", "sizes": "192x192", "type": "image/png"},
+    {"src": "/static/img/icon-512.png", "sizes": "512x512", "type": "image/png"}
+  ]
+}

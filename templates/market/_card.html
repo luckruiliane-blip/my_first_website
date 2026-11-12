@@ -1,0 +1,9 @@
+<article class="card-hover overflow-hidden rounded-2xl bg-white shadow-sm" data-reveal>
+  <img src="{% cycle IMAGES.cards.0 IMAGES.cards.1 IMAGES.cards.2 IMAGES.cards.3 IMAGES.cards.4 IMAGES.cards.5 %}" alt="Atelier {{ a.business_name }}" class="h-40 w-full object-cover bg-slate-200" loading="lazy" referrerpolicy="no-referrer">
+  <div class="p-5">
+    <div class="flex items-start justify-between gap-2"><h3 class="font-bold text-lg">{{ a.business_name }}</h3>{% if a.is_verified %}<span class="badge bg-emerald-100 text-emerald-700">Vérifié</span>{% endif %}</div>
+    <p class="text-sm text-slate-500 mt-1">{{ a.location }}, {{ a.city }}</p>
+    <p class="text-sm text-slate-600 mt-2">{{ a.n_services }} service{{ a.n_services|pluralize }}{% if a.years_experience %} · {{ a.years_experience }} an{{ a.years_experience|pluralize }} d'expérience{% endif %}</p>
+    <a href="{% url 'market:detail' a.pk %}" class="mt-4 inline-block rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-600">Voir la fiche</a>
+  </div>
+</article>

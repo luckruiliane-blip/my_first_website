@@ -1,0 +1,14 @@
+[Unit]
+Description=MetalLink (gunicorn)
+After=network.target mysql.service
+
+[Service]
+User=metallink
+Group=www-data
+WorkingDirectory=/srv/metallink
+ExecStart=/srv/metallink/venv/bin/gunicorn config.wsgi:application --workers 3 --bind unix:/run/metallink.sock --umask 007
+Restart=on-failure
+RuntimeDirectory=metallink
+
+[Install]
+WantedBy=multi-user.target

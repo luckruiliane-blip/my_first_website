@@ -1,0 +1,8 @@
+{% extends "base.html" %}{% block title %}Abonnement – MetalLink{% endblock %}{% block robots %}noindex{% endblock %}
+{% block content %}<div class="max-w-xl mx-auto px-4 py-12">
+<h1 class="text-3xl font-extrabold">Abonnement soudeur</h1>
+<div class="mt-4 rounded-2xl bg-white p-5 shadow-sm"><p class="text-4xl font-extrabold text-orange-500">{{ PRICE }} FCFA</p><p class="text-slate-600">pour 1 mois de publication et de mise à jour de vos services.</p>
+<p class="mt-2 text-sm">Accès actuel jusqu'au <b>{{ profile.access_until|date:"d/m/Y" }}</b>. La prolongation s'ajoute à votre période restante.</p></div>
+<div class="mt-6 rounded-2xl bg-white p-6 shadow">{% include "partials/_form.html" with submit="Payer par Mobile Money" %}</div>
+<p class="mt-3 text-xs text-slate-500">Vous recevrez une demande de confirmation sur votre téléphone. Aucun code secret n'est saisi sur ce site.</p>
+{% if history %}<h2 class="mt-8 font-bold">Derniers paiements</h2><ul class="mt-2 space-y-1 text-sm">{% for h in history %}<li>{{ h.created_at|date:"d/m/Y H:i" }} · {{ h.amount }} FCFA · {{ h.get_operator_display }} · {{ h.get_status_display }}</li>{% endfor %}</ul>{% endif %}</div>{% endblock %}

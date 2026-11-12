@@ -1,0 +1,12 @@
+{% extends "base.html" %}{% block title %}Connexion – MetalLink{% endblock %}
+{% block content %}<div class="max-w-md mx-auto px-4 py-12">
+<h1 class="text-3xl font-extrabold">Connexion</h1>
+<div class="mt-6 rounded-2xl bg-white p-6 shadow">
+<form method="post" class="space-y-5">{% csrf_token %}
+ {% if form.errors %}<div class="rounded-xl bg-red-100 text-red-800 px-4 py-3 text-sm">Identifiants incorrects.</div>{% endif %}
+ <div><label class="block text-sm font-semibold mb-1">Adresse e-mail</label>{{ form.username }}</div>
+ <div><label class="block text-sm font-semibold mb-1">Mot de passe</label>{{ form.password }}</div>
+ <input type="hidden" name="next" value="{{ next }}">
+ <button class="w-full rounded-xl bg-orange-500 px-5 py-3 font-bold text-white hover:bg-orange-600">Se connecter</button>
+</form></div>
+<p class="mt-4 text-sm text-center">Pas de compte ? <a class="text-orange-600 font-semibold" href="{% url 'accounts:register' %}">Inscrivez-vous</a></p></div>{% endblock %}

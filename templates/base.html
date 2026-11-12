@@ -1,0 +1,79 @@
+{% load static %}<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}MetalLink – Soudeurs du Littoral, Cameroun{% endblock %}</title>
+<meta name="description" content="{% block description %}Trouvez un soudeur ou métallier de confiance à Douala et dans le Littoral. Prenez rendez-vous et demandez un devis en ligne.{% endblock %}">
+<link rel="canonical" href="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
+<meta property="og:type" content="website"><meta property="og:site_name" content="MetalLink">
+<meta property="og:title" content="{% block ogtitle %}MetalLink – Soudeurs du Littoral, Cameroun{% endblock %}">
+<meta property="og:url" content="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
+<meta property="og:image" content="{{ IMAGES.hero }}"><meta property="og:locale" content="fr_CM">
+<meta name="theme-color" content="#0f172a">
+<link rel="manifest" href="{% static 'manifest.webmanifest' %}">
+<link rel="icon" href="{% static 'img/icon-192.png' %}" type="image/png">
+<link rel="apple-touch-icon" href="{% static 'img/icon-192.png' %}">
+{% if GOOGLE_VERIFY %}<meta name="google-site-verification" content="{{ GOOGLE_VERIFY }}">{% endif %}
+{% block head %}{% endblock %}
+<meta name="robots" content="{% block robots %}index,follow{% endblock %}">
+{% if USE_COMPILED_CSS %}<link rel="stylesheet" href="{% static 'css/app.css' %}">{% else %}<script src="https://cdn.tailwindcss.com/3.4.17"></script>{% endif %}
+<link rel="stylesheet" href="{% static 'css/site.css' %}">
+<script src="{% static 'js/app.js' %}" defer></script>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
+<header class="sticky top-0 z-40 bg-slate-900/95 backdrop-blur text-white shadow">
+  <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+    <a href="{% url 'market:home' %}" class="flex items-center gap-2 font-extrabold text-xl tracking-tight">
+      <span class="grid place-items-center h-9 w-9 rounded-lg bg-orange-500 text-white">M</span>Metal<span class="text-orange-400">Link</span>
+    </a>
+    <nav class="hidden md:flex items-center gap-6 text-sm font-medium">
+      <a class="hover:text-orange-400" href="{% url 'market:list' %}">Trouver un soudeur</a>
+      <a class="hover:text-orange-400" href="{% url 'market:support' %}">Service client</a>
+      {% if user.is_authenticated %}
+        <a class="hover:text-orange-400" href="{% url 'accounts:dashboard' %}">Mon espace</a>
+        <form method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}<button class="rounded-lg border border-white/30 px-3 py-1.5 hover:bg-white/10">Déconnexion</button></form>
+      {% else %}
+        <a class="hover:text-orange-400" href="{% url 'accounts:login' %}">Connexion</a>
+        <a class="rounded-lg bg-orange-500 px-4 py-2 font-semibold hover:bg-orange-600" href="{% url 'accounts:register' %}?role=artisan">Je suis soudeur</a>
+      {% endif %}
+    </nav>
+    <button id="menu-btn" class="md:hidden p-2" aria-label="Menu" aria-expanded="false">
+      <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+  </div>
+  <div id="menu" class="hidden md:hidden border-t border-white/10 px-4 py-3 space-y-3 text-sm">
+    <a class="block" href="{% url 'market:list' %}">Trouver un soudeur</a>
+    <a class="block" href="{% url 'market:support' %}">Service client</a>
+    {% if user.is_authenticated %}
+      <a class="block" href="{% url 'accounts:dashboard' %}">Mon espace</a>
+      <form method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}<button>Déconnexion</button></form>
+    {% else %}
+      <a class="block" href="{% url 'accounts:login' %}">Connexion</a>
+      <a class="block font-semibold text-orange-400" href="{% url 'accounts:register' %}?role=artisan">Je suis soudeur</a>
+    {% endif %}
+  </div>
+</header>
+
+{% if messages %}<div class="max-w-6xl mx-auto w-full px-4 mt-4 space-y-2" id="toasts">
+  {% for m in messages %}<div data-toast class="rounded-xl px-4 py-3 text-sm font-medium {% if m.tags == 'error' %}bg-red-100 text-red-800{% else %}bg-emerald-100 text-emerald-800{% endif %}">{{ m }}</div>{% endfor %}
+</div>{% endif %}
+
+<main class="flex-1">{% block content %}{% endblock %}</main>
+
+<footer class="bg-slate-900 text-slate-300 mt-16">
+  <div class="max-w-6xl mx-auto px-4 py-10 grid gap-8 sm:grid-cols-3 text-sm">
+    <div><p class="font-bold text-white text-lg">MetalLink</p><p class="mt-2">La plateforme qui relie clients et soudeurs de la région du Littoral.</p></div>
+    <div><p class="font-semibold text-white">Liens</p><ul class="mt-2 space-y-1">
+      <li><a class="hover:text-orange-400" href="{% url 'market:list' %}">Soudeurs</a></li>
+      <li><a class="hover:text-orange-400" href="{% url 'market:legal' 'cgu' %}">Conditions d'utilisation</a></li>
+      <li><a class="hover:text-orange-400" href="{% url 'market:legal' 'confidentialite' %}">Confidentialité</a></li></ul></div>
+    <div><p class="font-semibold text-white">Service client</p><ul class="mt-2 space-y-1">
+      <li><a class="hover:text-orange-400" href="{% url 'market:support' %}">Nous écrire</a></li>
+      <li><a class="hover:text-orange-400" rel="noopener" target="_blank" href="https://wa.me/{{ SUPPORT_WHATSAPP }}">WhatsApp</a></li>
+      <li>{{ SUPPORT_EMAIL }}</li></ul></div>
+  </div>
+  <p class="border-t border-white/10 text-center text-xs py-4">© {% now "Y" %} MetalLink. Tous droits réservés.</p>
+</footer>
+</body>
+</html>

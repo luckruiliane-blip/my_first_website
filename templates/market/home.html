@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Soudeur à Douala et dans le Littoral – Rendez-vous et devis | MetalLink{% endblock %}
+{% block description %}Trouvez un soudeur ou métallier à Douala, Edéa, Nkongsamba : portails, grilles, escaliers, charpente. Contact WhatsApp, rendez-vous et devis gratuits en ligne.{% endblock %}
+{% block content %}
+<section class="relative overflow-hidden bg-slate-900 text-white">
+  <img src="{{ IMAGES.hero }}" alt="" class="absolute inset-0 h-full w-full object-cover opacity-30" loading="eager" referrerpolicy="no-referrer">
+  <div class="relative max-w-6xl mx-auto px-4 py-20 sm:py-28">
+    <p class="inline-block rounded-full bg-orange-500/20 text-orange-300 px-3 py-1 text-sm font-semibold" data-reveal>Douala · Edéa · Nkongsamba et tout le Littoral</p>
+    <h1 class="mt-4 text-4xl sm:text-6xl font-extrabold leading-tight max-w-3xl" data-reveal>Le bon soudeur, près de chez vous, en quelques clics.</h1>
+    <p class="mt-4 text-lg text-slate-200 max-w-2xl" data-reveal>Comparez les soudeurs et métalliers, prenez rendez-vous et demandez un devis gratuit en ligne.</p>
+    <form action="{% url 'market:list' %}" method="get" class="mt-8 grid gap-3 rounded-2xl bg-white p-3 text-slate-800 shadow-xl sm:grid-cols-4" data-reveal>
+      <input name="q" data-safe="line" maxlength="60" placeholder="Portail, escalier, réparation…" class="rounded-xl border border-slate-200 px-4 py-3 sm:col-span-2">
+      <select name="ville" class="rounded-xl border border-slate-200 px-4 py-3"><option value="">Toutes les villes</option>{% for v,l in cities %}<option value="{{ v }}">{{ l }}</option>{% endfor %}</select>
+      <button class="rounded-xl bg-orange-500 px-5 py-3 font-bold text-white hover:bg-orange-600">Rechercher</button>
+    </form>
+  </div>
+</section>
+
+<section class="max-w-6xl mx-auto px-4 py-14">
+  <h2 class="text-2xl sm:text-3xl font-extrabold">Que cherchez-vous ?</h2>
+  <div class="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+    {% for k,l in categories %}<a href="{% url 'market:list' %}?categorie={{ k }}" class="card-hover rounded-2xl bg-white p-5 shadow-sm font-semibold" data-reveal>{{ l }}</a>{% endfor %}
+  </div>
+</section>
+
+<section class="bg-white py-14"><div class="max-w-6xl mx-auto px-4">
+  <h2 class="text-2xl sm:text-3xl font-extrabold">Comment ça marche</h2>
+  <div class="mt-8 grid gap-6 sm:grid-cols-3">
+    <div class="rounded-2xl border p-6" data-reveal><p class="text-4xl font-extrabold text-orange-500">1</p><p class="mt-2 font-bold">Cherchez</p><p class="text-slate-600 text-sm mt-1">Filtrez par ville et par type de travail.</p></div>
+    <div class="rounded-2xl border p-6" data-reveal><p class="text-4xl font-extrabold text-orange-500">2</p><p class="mt-2 font-bold">Contactez</p><p class="text-slate-600 text-sm mt-1">WhatsApp, rendez-vous ou devis en ligne.</p></div>
+    <div class="rounded-2xl border p-6" data-reveal><p class="text-4xl font-extrabold text-orange-500">3</p><p class="mt-2 font-bold">Faites réaliser</p><p class="text-slate-600 text-sm mt-1">Le soudeur intervient à la date convenue.</p></div>
+  </div></div></section>
+
+<section class="max-w-6xl mx-auto px-4 py-14">
+  <div class="flex items-end justify-between"><h2 class="text-2xl sm:text-3xl font-extrabold">Soudeurs à la une</h2><a class="text-orange-600 font-semibold" href="{% url 'market:list' %}">Voir tous</a></div>
+  <div class="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+    {% for a in featured %}{% include "market/_card.html" %}{% empty %}<p class="text-slate-500">Les premiers soudeurs arrivent bientôt.</p>{% endfor %}
+  </div>
+</section>
+
+<section class="relative bg-slate-900 text-white overflow-hidden">
+  <img src="{{ IMAGES.cta }}" alt="" class="absolute inset-0 h-full w-full object-cover opacity-25" loading="lazy" referrerpolicy="no-referrer">
+  <div class="relative max-w-4xl mx-auto px-4 py-16 text-center">
+    <h2 class="text-3xl font-extrabold">Vous êtes soudeur ou métallier ?</h2>
+    <p class="mt-3 text-slate-200">{{ TRIAL_DAYS }} jours gratuits, puis {{ PRICE }} FCFA par mois, par MTN MoMo ou Orange Money.</p>
+    <a href="{% url 'accounts:register' %}?role=artisan" class="mt-6 inline-block rounded-xl bg-orange-500 px-6 py-3 font-bold hover:bg-orange-600">Publier mes services</a>
+  </div>
+</section>
+{% endblock %}

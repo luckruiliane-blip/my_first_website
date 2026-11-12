@@ -1,0 +1,15 @@
+{
+  "appId": "cm.metallink.app",
+  "appName": "MetalLink",
+  "webDir": "www",
+  "server": {
+    "url": "https://VOTRE-DOMAINE.com",
+    "cleartext": false,
+    "allowNavigation": ["VOTRE-DOMAINE.com", "*.VOTRE-DOMAINE.com"]
+  },
+  "android": { "allowMixedContent": false },
+  "plugins": {
+    "SplashScreen": { "launchShowDuration": 1500, "backgroundColor": "#0F172A" },
+    "StatusBar": { "style": "DARK", "backgroundColor": "#0F172A" }
+  }
+}

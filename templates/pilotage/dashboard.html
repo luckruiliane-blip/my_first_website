@@ -1,0 +1,15 @@
+{% extends "base.html" %}{% block title %}Pilotage – MetalLink{% endblock %}{% block robots %}noindex,nofollow{% endblock %}
+{% block content %}<div class="max-w-6xl mx-auto px-4 py-10 space-y-8">
+<div class="flex flex-wrap items-center justify-between gap-3"><h1 class="text-3xl font-extrabold">Tableau de pilotage</h1>
+<a href="/{{ admin_path }}/" class="rounded-xl bg-slate-900 text-white px-4 py-2 text-sm font-semibold">Administration complète</a></div>
+<div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+{% for l,n in kpi %}<div class="rounded-2xl bg-white p-4 shadow-sm"><p class="text-2xl font-extrabold">{{ n }}</p><p class="text-xs text-slate-500">{{ l }}</p></div>{% endfor %}
+<div class="rounded-2xl bg-orange-500 text-white p-4 shadow-sm"><p class="text-2xl font-extrabold">{{ revenue }}</p><p class="text-xs">FCFA encaissés</p></div></div>
+<section class="rounded-2xl bg-white p-5 shadow-sm"><h2 class="font-bold mb-3">Inscriptions (30 derniers jours)</h2>
+{% for s in signups %}<div class="flex items-center gap-3 text-xs mb-1"><span class="w-20">{{ s.d|date:"d/m" }}</span><div class="h-3 rounded bg-orange-500" style="width:{{ s.w }}%"></div><span>{{ s.n }}</span></div>{% empty %}<p class="text-sm text-slate-500">Aucune inscription.</p>{% endfor %}</section>
+<div class="grid gap-6 lg:grid-cols-2">
+<section class="rounded-2xl bg-white p-5 shadow-sm"><h2 class="font-bold mb-3">Derniers inscrits</h2>{% for u in users %}<p class="text-sm border-b py-1">{{ u.full_name }} · {{ u.email }} · {{ u.phone }} · {{ u.role }}</p>{% endfor %}</section>
+<section class="rounded-2xl bg-white p-5 shadow-sm"><h2 class="font-bold mb-3">Derniers soudeurs</h2>{% for a in artisans %}<p class="text-sm border-b py-1">{{ a.business_name }} · {{ a.city }} · {{ a.whatsapp }} · accès jusqu'au {{ a.access_until|date:"d/m/Y" }}</p>{% endfor %}</section>
+<section class="rounded-2xl bg-white p-5 shadow-sm"><h2 class="font-bold mb-3">Paiements</h2>{% for p in payments %}<p class="text-sm border-b py-1">{{ p.created_at|date:"d/m H:i" }} · {{ p.user.email }} · {{ p.amount }} · {{ p.operator }} · {{ p.get_status_display }}</p>{% endfor %}</section>
+<section class="rounded-2xl bg-white p-5 shadow-sm"><h2 class="font-bold mb-3">Messages du service client</h2>{% for m in support_msgs %}<p class="text-sm border-b py-1"><b>{{ m.subject }}</b> · {{ m.name }} ({{ m.email }}) : {{ m.message|truncatechars:120 }}</p>{% endfor %}</section>
+<section class="rounded-2xl bg-white p-5 shadow-sm lg:col-span-2"><h2 class="font-bold mb-3">Derniers rendez-vous</h2>{% for a in appointments %}<p class="text-sm border-b py-1">{{ a.date|date:"d/m/Y" }} {{ a.time|time:"H:i" }} · {{ a.client.full_name }} → {{ a.profile.business_name }} · {{ a.get_status_display }}</p>{% endfor %}</section></div></div>{% endblock %}

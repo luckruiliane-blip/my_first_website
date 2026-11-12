@@ -1,0 +1,7 @@
+{% extends "base.html" %}{% block title %}Inscription – MetalLink{% endblock %}
+{% block content %}<div class="max-w-xl mx-auto px-4 py-12">
+<h1 class="text-3xl font-extrabold">Créer mon compte</h1>
+<p class="text-slate-500 mt-1">Une seule adresse e-mail par compte. Soudeurs : {{ TRIAL_DAYS }} jours gratuits, sans carte bancaire.</p>
+<div class="mt-6 rounded-2xl bg-white p-6 shadow" id="register-box">
+{% include "partials/_form.html" with submit="Créer mon compte" %}
+</div><p class="mt-4 text-sm text-center">Déjà inscrit ? <a class="text-orange-600 font-semibold" href="{% url 'accounts:login' %}">Connexion</a></p></div>{% endblock %}

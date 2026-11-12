@@ -1,0 +1,18 @@
+{% extends "base.html" %}{% block title %}Mon espace – MetalLink{% endblock %}{% block robots %}noindex{% endblock %}
+{% block content %}<div class="max-w-5xl mx-auto px-4 py-10 space-y-8">
+<div class="flex flex-wrap items-center justify-between gap-3"><h1 class="text-3xl font-extrabold">Bonjour {{ user.get_short_name }}</h1>
+<a href="{% url 'market:list' %}" class="rounded-xl bg-orange-500 text-white px-5 py-2.5 font-semibold">Trouver un soudeur</a></div>
+<section><h2 class="text-xl font-bold mb-3">Mes rendez-vous</h2><div class="space-y-3">
+{% for a in appointments %}<div class="rounded-xl bg-white p-4 shadow-sm flex flex-wrap justify-between gap-2">
+ <div><p class="font-semibold">{{ a.profile.business_name }} – {{ a.date|date:"d/m/Y" }} à {{ a.time|time:"H:i" }}</p><p class="text-sm text-slate-500">{{ a.work_place }}</p></div>
+ <div class="flex items-center gap-3"><span class="badge">{{ a.get_status_display }}</span>
+ {% if a.status == "pending" or a.status == "confirmed" %}<form method="post" action="{% url 'market:appointment_status' a.pk 'cancelled' %}">{% csrf_token %}<button class="text-sm text-red-600">Annuler</button></form>{% endif %}</div></div>
+{% empty %}<p class="text-slate-500">Aucun rendez-vous pour l'instant.</p>{% endfor %}</div></section>
+<section><h2 class="text-xl font-bold mb-3">Mes demandes de devis</h2><div class="space-y-3">
+{% for q in quotes %}<div class="rounded-xl bg-white p-4 shadow-sm">
+ <div class="flex flex-wrap justify-between gap-2"><p class="font-semibold">{{ q.profile.business_name }} – {{ q.get_category_display }}</p><span class="badge">{{ q.get_status_display }}</span></div>
+ {% if q.answer_price %}<p class="mt-2 text-sm">Offre : <b>{{ q.answer_price }} FCFA</b> – {{ q.answer_note }}</p>
+ {% if q.status == "answered" %}<div class="mt-3 flex gap-2">
+ <form method="post" action="{% url 'market:quote_decide' q.pk 'accepted' %}">{% csrf_token %}<button class="rounded-lg bg-emerald-600 text-white px-3 py-1.5 text-sm">Accepter</button></form>
+ <form method="post" action="{% url 'market:quote_decide' q.pk 'refused' %}">{% csrf_token %}<button class="rounded-lg border px-3 py-1.5 text-sm">Refuser</button></form></div>{% endif %}{% endif %}</div>
+{% empty %}<p class="text-slate-500">Aucune demande de devis.</p>{% endfor %}</div></section></div>{% endblock %}
