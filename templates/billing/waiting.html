@@ -2,5 +2,5 @@
 {% block content %}<div class="max-w-md mx-auto px-4 py-20 text-center">
 <div class="mx-auto h-14 w-14 animate-spin rounded-full border-4 border-orange-500 border-t-transparent"></div>
 <h1 class="mt-6 text-2xl font-extrabold">Confirmez sur votre téléphone</h1>
-<p class="mt-2 text-slate-600">Validez la demande de {{ payment.amount }} FCFA reçue de {{ payment.get_operator_display }}.</p>
+<p class="mt-2 text-slate-600">Validez la demande de {{ payment.amount }} 5000 FCFA reçue de {{ payment.get_operator_display }}.</p>
 <p id="pay-state" data-url="{% url 'billing:status' payment.reference %}" data-next="{% url 'accounts:dashboard' %}" class="mt-4 text-sm text-slate-500">En attente…</p></div>{% endblock %}
